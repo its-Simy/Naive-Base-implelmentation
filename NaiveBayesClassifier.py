@@ -4,7 +4,7 @@ from collections import defaultdict
 class NaiveBayesClassifier:
     def __init__(self, model_type="gaussian"):
         self.model_type = model_type
-        self.classes = None
+        self.classes = None 
         self.priors = None
         self.conditional_probs = None
 
@@ -19,14 +19,14 @@ class NaiveBayesClassifier:
             for c in self.classes:
                 X_c = X[y == c]
                 self.conditional_probs[c]['mean'] = np.mean(X_c, axis=0)
-                self.conditional_probs[c]['variance'] = np.var(X_c, axis=0) + 1e-9  # Smoothing
+                self.conditional_probs[c]['variance'] = np.var(X_c, axis=0) + 1e-9  # Smoothing, prevents the likelyhood of the result being zero
         
-        elif self.model_type == "multinomial":
+        elif self.model_type == "multinomial":#Calculates the features
             total_features = X.shape[1]
             self.conditional_probs = {c: {} for c in self.classes}
             for c in self.classes:
                 X_c = X[y == c]
-                feature_counts = np.sum(X_c, axis=0) + 1  # Laplace Smoothing
+                feature_counts = np.sum(X_c, axis=0) + 1  # Laplace Smoothing, Also helps prevent that there are no zeros
                 self.conditional_probs[c]['likelihoods'] = feature_counts / np.sum(feature_counts)
         else:
             raise ValueError("Unsupported model type")
@@ -45,12 +45,12 @@ class NaiveBayesClassifier:
         """Predict the class labels for given input data."""
         predictions = []
         for x in X:
-            posteriors = {}
+            predictors = {}
             for c in self.classes:
                 prior = self.priors[c]
-                likelihood = self._conditional_probability(x, self.conditional_probs[c])
-                posteriors[c] = prior * likelihood
-            predictions.append(max(posteriors, key=posteriors.get))
+                likelihood = self._conditional_probability(x, self.conditional_probs[c]) #gives probability of that collumn
+                predictors[c] = prior * likelihood
+            predictions.append(max(predictors, key=predictors.get))
         return np.array(predictions)
 
 # Example usage:
