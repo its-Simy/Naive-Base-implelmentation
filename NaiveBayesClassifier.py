@@ -55,16 +55,24 @@ class NaiveBayesClassifier:
 
 # Example usage:
 if __name__ == "__main__":
-    from sklearn.model_selection import train_test_split
-    from sklearn.datasets import make_multilabel_classification
+    from sklearn.model_selection import train_test_split #will randomly generate the training data
+    from sklearn.datasets import make_multilabel_classification 
 
-    # Generate synthetic dataset
-    X, y = make_multilabel_classification(n_samples=1000, n_features=5, random_state=42)
+    # This will generate the data set how we specify, 1000 data points, 5 features(colums), 
+    X, y = make_multilabel_classification(n_samples = 10000, n_features = 5, random_state=42)
     X_train, X_test, y_train, y_test = train_test_split(X, y[:, 0], test_size=0.2, random_state=42)  # Use single label
     
-    # Multinomial Naïve Bayes
+    # Multinomial Accuracy Naïve Bayes
     nb_multinomial = NaiveBayesClassifier(model_type="multinomial")
     nb_multinomial.fit(X_train, y_train)
     y_pred = nb_multinomial.predict(X_test)
     accuracy = np.mean(y_pred == y_test)
     print(f"Multinomial Naïve Bayes Accuracy: {accuracy:.2f}")
+    
+    #gaussian Accuacy
+    nb_multinomial = NaiveBayesClassifier(model_type="gaussian")
+    nb_multinomial.fit(X_train, y_train)
+    y_pred = nb_multinomial.predict(X_test)
+    accuracy = np.mean(y_pred == y_test)
+    print(f"Multinomial Naïve Bayes Accuracy: {accuracy:.2f}")
+    
